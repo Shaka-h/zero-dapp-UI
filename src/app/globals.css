@@ -5,6 +5,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --text: #ebffdd;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -14,8 +15,23 @@
   }
 }
 
+
+
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color: var(--text);
+  background: rgb(59,28,50);
+  background: linear-gradient(90deg, rgba(59,28,50,1) 17%, rgba(106,30,85,1) 58%, rgba(166,77,121,1) 100%);
+  /* background: var(--background); */
   font-family: Arial, Helvetica, sans-serif;
+  /* font-size: large; */
+  
+}
+
+.title{
+  color: aqua;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 500;
+  font-size: xx-large;
+  /* text-shadow: 5px 7px 4px rgba(206,89,55,0.75); */
+  text-shadow: -2px 1px 0px #00e6e6, 1px 1px 0px #02a5a5, 2px 1px 0px #02a5a5, 3px 1px 0px #8167df , 4px 1px 0px #4b398b , 5px 1px 0px #321e7a;
 }

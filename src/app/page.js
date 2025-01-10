@@ -3,10 +3,12 @@
 import Image from "next/image";
 import React, { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
+import { getSignerContract } from '@/app/ethereum/utils'
 export default function Home() {
   const [provider, setProvider] = useState(null);
   const [walletAddress, setWalletAddress] = useState("");
   const [isConnected, setIsConnected] = useState(false);
+  const contract = getSignerContract.request_contract;
 
   const connectWallet = async () => {
     if (typeof window !== "undefined" && window.ethereum) {
@@ -26,6 +28,10 @@ export default function Home() {
     } else {
       alert("MetaMask is not installed. Please install it to connect.");
     }
+
+    const contract = getSignerContract().request_contract;
+
+    console.log(contract.unlockTime, "OOOO");
   };
 
   return (

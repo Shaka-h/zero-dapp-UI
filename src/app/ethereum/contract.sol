@@ -8,7 +8,6 @@ contract ZeroToDappToken is ERC20, Ownable {
     uint256 public constant MINT_AMOUNT = 5 * (10 ** 18); 
     uint256 public constant MINT_LIMIT = 2;              
     uint256 public constant PERIOD = 5 seconds;           
-    uint256 public blocktimestamp = block.timestamp;
 
     struct MintingInfo {
         uint256 lastMintTime;   

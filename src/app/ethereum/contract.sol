@@ -1,34 +1,44 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.28;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
-// Uncomment this line to use console.log
-// import "hardhat/console.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Lock {
-    uint public unlockTime;
-    address payable public owner;
+contract ZeroToDappToken is ERC20, Ownable {
+    uint256 public constant MINT_AMOUNT = 5 * (10 ** 18); 
+    uint256 public constant MINT_LIMIT = 2;              
+    uint256 public constant PERIOD = 5 seconds;           
+    uint256 public blocktimestamp = block.timestamp;
 
-    event Withdrawal(uint amount, uint when);
-
-    constructor(uint _unlockTime) payable {
-        require(
-            block.timestamp < _unlockTime,
-            "Unlock time should be in the future"
-        );
-
-        unlockTime = _unlockTime;
-        owner = payable(msg.sender);
+    struct MintingInfo {
+        uint256 lastMintTime;   
     }
 
-    function withdraw() public {
-        // Uncomment this line, and the import of "hardhat/console.sol", to print a log in your terminal
-        // console.log("Unlock time is %o and block timestamp is %o", unlockTime, block.timestamp);
+    mapping(address => MintingInfo) public mintingRecords;
 
-        require(block.timestamp >= unlockTime, "You can't withdraw yet");
-        require(msg.sender == owner, "You aren't the owner");
 
-        emit Withdrawal(address(this).balance, block.timestamp);
+    constructor(
+        string memory _name, 
+        string memory _symbol 
+    ) ERC20(_name, _symbol) Ownable(msg.sender){
+        
+    }
 
-        owner.transfer(address(this).balance);
+
+    function mint() external {
+        MintingInfo storage record = mintingRecords[msg.sender];
+        uint256 currentTime = block.timestamp;
+
+        require(
+            currentTime >= record.lastMintTime + PERIOD,
+            "You can mint only once during the cooldown period."
+        );
+
+        record.lastMintTime = currentTime;
+        _mint(msg.sender, MINT_AMOUNT);
+    }
+
+    function ownerMint(address to, uint256 amount) external onlyOwner {
+        _mint(to, amount);
     }
 }
